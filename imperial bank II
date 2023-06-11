@@ -1,0 +1,124 @@
+usuários = []
+clientes = []
+agência = '0001'
+contas = []
+cont = 0
+saldo = 0
+saques = 0
+limite = 500
+extrato = ''
+
+def menu():
+    print(f'''
+[A] Cadastrar cliente
+[B] Listar cliente
+[C] Cadastrar conta corrente
+[D] Listar contas
+[E] Saque
+[F] Depósito
+[G] Extrato
+[H] Sair
+''')
+    return input()
+
+
+def cadastrar_cliente(usuários):
+    cpf = str(input('Digite o CPF do usuário: '))
+    for usuário in usuários:
+        if usuário['CPF'] == cpf:
+            print('Já existe usuário cadastrado com esse CPF!')
+            return None
+    nome = input('Digite o nome completo do usuário: ')
+    nasc = input('Data de nascimento (dd/mm/aaaa): ')
+    endereço = input('Logadouro (endereço residencial, n°, cidade e sigla estado): ')
+    usuários. append({'Nome': nome, 'Nascimento': nasc, 'CPF': cpf, 'Endereço': endereço})
+    print('Usuário criado com sucesso! ')
+    return usuários
+
+def cadastrar_conta(contas):
+    global cont
+    n_conta = '1234'
+    cpf = input('Digite o número do CPF: ')
+    for usuário in usuários:
+        if usuário ['CPF'] == cpf:
+            cont += 1
+            numero_conta = f'{n_conta} / {cont}'
+            contas.append({'Titular': usuário['Nome'], 'Agência': agência, 'n° conta': numero_conta})
+            return contas
+            return cont
+        else:
+            print('Não foi possível criar conta, usuário não encontrado!')
+
+def depositar(valor):
+    global extrato
+    global saldo
+    if valor > 0:
+        saldo += valor
+        extrato += f'Depósito R$ {valor}\n'
+        print('Depósito realizado com sucesso!')
+        return saldo
+        return extrato
+    else:
+        print('O valor informado é inválido!'.upper())
+
+def sacar(valor, limite, saques):
+    global extrato
+    global saldo
+    if valor > limite:
+        print(f'''O valor informado está acima do limite de saque (R$ 500,00). 
+        Por favor informe um valor válido!'''.upper())
+    elif valor < 0:
+        print('O valor informado é inválido!'.upper())
+    elif valor > saldo:
+        print('Você não possui saldo suficiente na sua conta para efetuar essa operação!'.upper())
+    elif saques > 3:
+        print(f'''Você já ultrapassou o limite permitido de 3 saques diários.
+            Em caso de emergência l igue para a sua agência!'''.upper())
+    else:
+        saldo -= valor
+        extrato += f'Saque R$ {valor}\n'
+        saques += 1
+        return saldo
+        return extrato
+        return limite
+
+def exibir_extrato(saldo, extrato):
+    if extrato == '':
+        print('Você ainda não realizou nenhuma transação: ')
+    else:
+        print(f'{extrato} \n Saldo: R$ {saldo}')
+
+
+
+while True:
+    opção = menu()
+
+    if opção == 'a':
+        cadastrar_cliente(usuários)
+
+    elif opção == 'b':
+        print(usuários)
+
+    elif opção == 'c':
+        cadastrar_conta(contas)
+
+    elif opção == 'd':
+        print(contas)
+
+    elif opção == 'e':
+        valor = float(input('Digite o valor que deseja sacar R$: '))
+        sacar(valor = valor, limite = limite, saques = saques)
+
+    elif opção == 'f':
+        valor = float(input('Digite o valor que deseja depositar R$: '))
+        saldo = depositar(valor)
+
+    elif opção == 'g':
+        exibir_extrato(saldo, extrato = extrato)
+
+    elif opção == 'h':
+        break
+
+    else:
+        print('Erro! Digite uma opção válida'.upper())
+
